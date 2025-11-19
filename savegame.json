@@ -1,10 +1,13 @@
 {
-  "turn": 5,
+  "turn": 1,
+  "time": 1,
+  "day": 0,
   "player": {
     "hull": 100,
     "max_hull": 100,
     "attack": 10,
     "defense": 5,
+    "shields": 10,
     "fuel": 300,
     "max_holds": 30,
     "credits": 1000,
@@ -22,48 +25,34 @@
         "id": 1,
         "neighbors": [
           24,
-          2,
-          7
+          2
         ],
         "type": "FEDSPACE",
         "has_pirates": false,
         "port": null,
-        "planet": {
-          "name": "Alpha Base",
-          "sector_id": 1,
-          "goods": {
-            "ore": 5,
-            "organics": 5,
-            "equipment": 5
-          },
-          "treasury": 0,
-          "production_rates": {
-            "ore": 1,
-            "organics": 1,
-            "equipment": 1
-          }
-        }
+        "planet": null
       },
       "2": {
         "id": 2,
         "neighbors": [
           1,
+          10,
           3
         ],
         "type": "FEDSPACE",
         "has_pirates": false,
         "port": {
-          "name": "Tau Station",
+          "name": "Orion Exchange",
           "type_id": 1,
           "commodity_levels": {
-            "ore": 48,
+            "ore": 51,
             "organics": 30,
-            "equipment": 43
+            "equipment": 54
           },
           "prices": {
-            "ore": 52,
+            "ore": 53,
             "organics": 32,
-            "equipment": 78
+            "equipment": 72
           }
         },
         "planet": null
@@ -83,7 +72,6 @@
         "id": 4,
         "neighbors": [
           3,
-          20,
           5
         ],
         "type": "FEDSPACE",
@@ -99,30 +87,42 @@
         ],
         "type": "FEDSPACE",
         "has_pirates": false,
-        "port": null,
+        "port": {
+          "name": "Nova Harbor",
+          "type_id": 2,
+          "commodity_levels": {
+            "ore": 23,
+            "organics": 32,
+            "equipment": 78
+          },
+          "prices": {
+            "ore": 44,
+            "organics": 36,
+            "equipment": 59
+          }
+        },
         "planet": null
       },
       "6": {
         "id": 6,
         "neighbors": [
-          24,
           5,
           7
         ],
         "type": "NORMAL",
         "has_pirates": false,
         "port": {
-          "name": "Sigma Exchange",
+          "name": "Beta Depot",
           "type_id": 2,
           "commodity_levels": {
-            "ore": 80,
-            "organics": 80,
-            "equipment": 61
+            "ore": 68,
+            "organics": 53,
+            "equipment": 25
           },
           "prices": {
-            "ore": 29,
-            "organics": 46,
-            "equipment": 68
+            "ore": 32,
+            "organics": 40,
+            "equipment": 88
           }
         },
         "planet": null
@@ -131,25 +131,11 @@
         "id": 7,
         "neighbors": [
           8,
-          1,
           6
         ],
-        "type": "NORMAL",
-        "has_pirates": false,
-        "port": {
-          "name": "Sigma Harbor",
-          "type_id": 3,
-          "commodity_levels": {
-            "ore": 44,
-            "organics": 38,
-            "equipment": 63
-          },
-          "prices": {
-            "ore": 38,
-            "organics": 30,
-            "equipment": 113
-          }
-        },
+        "type": "PIRATE",
+        "has_pirates": true,
+        "port": null,
         "planet": null
       },
       "8": {
@@ -167,33 +153,48 @@
         "id": 9,
         "neighbors": [
           8,
-          10
+          10,
+          19
         ],
         "type": "NORMAL",
         "has_pirates": false,
-        "port": null,
+        "port": {
+          "name": "Gamma Exchange",
+          "type_id": 2,
+          "commodity_levels": {
+            "ore": 75,
+            "organics": 71,
+            "equipment": 27
+          },
+          "prices": {
+            "ore": 30,
+            "organics": 44,
+            "equipment": 86
+          }
+        },
         "planet": null
       },
       "10": {
         "id": 10,
         "neighbors": [
           9,
+          2,
           11
         ],
         "type": "NORMAL",
         "has_pirates": false,
         "port": {
-          "name": "Kappa Market",
+          "name": "Orion Exchange",
           "type_id": 3,
           "commodity_levels": {
-            "ore": 45,
-            "organics": 34,
-            "equipment": 50
+            "ore": 65,
+            "organics": 36,
+            "equipment": 74
           },
           "prices": {
-            "ore": 38,
-            "organics": 31,
-            "equipment": 106
+            "ore": 33,
+            "organics": 30,
+            "equipment": 119
           }
         },
         "planet": null
@@ -207,17 +208,17 @@
         "type": "NORMAL",
         "has_pirates": false,
         "port": {
-          "name": "Gamma Station",
-          "type_id": 3,
+          "name": "Epsilon Outpost",
+          "type_id": 2,
           "commodity_levels": {
-            "ore": 57,
-            "organics": 48,
-            "equipment": 49
+            "ore": 66,
+            "organics": 23,
+            "equipment": 61
           },
           "prices": {
-            "ore": 35,
-            "organics": 28,
-            "equipment": 106
+            "ore": 33,
+            "organics": 34,
+            "equipment": 68
           }
         },
         "planet": null
@@ -230,22 +231,21 @@
         ],
         "type": "NORMAL",
         "has_pirates": false,
-        "port": null,
-        "planet": {
-          "name": "Gamma Base",
-          "sector_id": 12,
-          "goods": {
-            "ore": 5,
-            "organics": 5,
-            "equipment": 5
+        "port": {
+          "name": "Omega Tradeport",
+          "type_id": 2,
+          "commodity_levels": {
+            "ore": 39,
+            "organics": 30,
+            "equipment": 62
           },
-          "treasury": 0,
-          "production_rates": {
-            "ore": 1,
-            "organics": 1,
-            "equipment": 1
+          "prices": {
+            "ore": 40,
+            "organics": 36,
+            "equipment": 68
           }
-        }
+        },
+        "planet": null
       },
       "13": {
         "id": 13,
@@ -278,17 +278,17 @@
         "type": "NORMAL",
         "has_pirates": false,
         "port": {
-          "name": "Tau Station",
-          "type_id": 2,
+          "name": "Kappa Exchange",
+          "type_id": 3,
           "commodity_levels": {
-            "ore": 46,
-            "organics": 39,
-            "equipment": 64
+            "ore": 20,
+            "organics": 38,
+            "equipment": 27
           },
           "prices": {
-            "ore": 38,
-            "organics": 37,
-            "equipment": 67
+            "ore": 45,
+            "organics": 30,
+            "equipment": 94
           }
         },
         "planet": null
@@ -299,20 +299,20 @@
           17,
           15
         ],
-        "type": "PIRATE",
-        "has_pirates": true,
+        "type": "NORMAL",
+        "has_pirates": false,
         "port": {
-          "name": "Rigel Outpost",
-          "type_id": 3,
+          "name": "Tau Exchange",
+          "type_id": 2,
           "commodity_levels": {
-            "ore": 68,
-            "organics": 31,
-            "equipment": 53
+            "ore": 71,
+            "organics": 77,
+            "equipment": 50
           },
           "prices": {
-            "ore": 32,
-            "organics": 31,
-            "equipment": 108
+            "ore": 31,
+            "organics": 45,
+            "equipment": 74
           }
         },
         "planet": null
@@ -326,25 +326,12 @@
         "type": "NORMAL",
         "has_pirates": false,
         "port": null,
-        "planet": {
-          "name": "Nova Harbor",
-          "sector_id": 17,
-          "goods": {
-            "ore": 5,
-            "organics": 5,
-            "equipment": 5
-          },
-          "treasury": 0,
-          "production_rates": {
-            "ore": 1,
-            "organics": 1,
-            "equipment": 1
-          }
-        }
+        "planet": null
       },
       "18": {
         "id": 18,
         "neighbors": [
+          24,
           17,
           19
         ],
@@ -356,25 +343,50 @@
       "19": {
         "id": 19,
         "neighbors": [
+          9,
           18,
           20
         ],
         "type": "NORMAL",
         "has_pirates": false,
-        "port": null,
+        "port": {
+          "name": "Alpha Outpost",
+          "type_id": 1,
+          "commodity_levels": {
+            "ore": 31,
+            "organics": 59,
+            "equipment": 41
+          },
+          "prices": {
+            "ore": 48,
+            "organics": 26,
+            "equipment": 79
+          }
+        },
         "planet": null
       },
       "20": {
         "id": 20,
         "neighbors": [
           19,
-          4,
-          21,
-          22
+          21
         ],
         "type": "NORMAL",
         "has_pirates": false,
-        "port": null,
+        "port": {
+          "name": "Tau Outpost",
+          "type_id": 3,
+          "commodity_levels": {
+            "ore": 45,
+            "organics": 51,
+            "equipment": 46
+          },
+          "prices": {
+            "ore": 38,
+            "organics": 27,
+            "equipment": 104
+          }
+        },
         "planet": null
       },
       "21": {
@@ -385,27 +397,25 @@
         ],
         "type": "NORMAL",
         "has_pirates": false,
-        "port": null,
-        "planet": {
-          "name": "Delta Prime",
-          "sector_id": 21,
-          "goods": {
-            "ore": 5,
-            "organics": 5,
-            "equipment": 5
+        "port": {
+          "name": "Beta Harbor",
+          "type_id": 2,
+          "commodity_levels": {
+            "ore": 71,
+            "organics": 61,
+            "equipment": 45
           },
-          "treasury": 0,
-          "production_rates": {
-            "ore": 1,
-            "organics": 1,
-            "equipment": 1
+          "prices": {
+            "ore": 31,
+            "organics": 42,
+            "equipment": 77
           }
-        }
+        },
+        "planet": null
       },
       "22": {
         "id": 22,
         "neighbors": [
-          20,
           21,
           23
         ],
@@ -423,17 +433,17 @@
         "type": "NORMAL",
         "has_pirates": false,
         "port": {
-          "name": "Nova Tradeport",
-          "type_id": 1,
+          "name": "Tau Outpost",
+          "type_id": 3,
           "commodity_levels": {
-            "ore": 40,
-            "organics": 21,
-            "equipment": 31
+            "ore": 33,
+            "organics": 24,
+            "equipment": 22
           },
           "prices": {
-            "ore": 50,
+            "ore": 41,
             "organics": 33,
-            "equipment": 84
+            "equipment": 91
           }
         },
         "planet": null
@@ -442,7 +452,7 @@
         "id": 24,
         "neighbors": [
           1,
-          6,
+          18,
           23
         ],
         "type": "NORMAL",

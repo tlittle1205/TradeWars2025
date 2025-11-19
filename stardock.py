@@ -1,17 +1,23 @@
 # stardock.py
 # ============================================================
 # STARDOCK — "THE CELESTIAL BAZAAR"
-#
-# Tone:
-# - Mos Eisley (chaotic scum hub)
-# - Blade Runner (neon, rain, cyberpunk gutters)
-# - Hedonistic Paradise (pleasure dens, indulgence)
-# - Rodeo Drive (luxury boutiques, elite fashion)
-#
-# The heart of civilization, crime, decadence, and commerce.
 # ============================================================
 
 import random
+
+from descriptions import depart
+# ============================================================
+# LOCAL INPUT WRAPPER (avoids circular import with tw25)
+# ============================================================
+
+def sd_input(prompt="> "):
+    """Stardock-safe input that supports CLS/CLEAR."""
+    from tw25 import intercept_clear   # safe 1-way dependency
+    while True:
+        cmd = input(prompt).strip()
+        if intercept_clear(cmd.lower()):
+            continue
+        return cmd
 
 
 class StarDock:
@@ -38,7 +44,7 @@ class StarDock:
             print("5. Tech Lab (Experimental Mods)")
             print("0. Return to Space")
 
-            cmd = input("\nChoose destination: ").strip()
+            cmd = sd_input("\nChoose destination: ")
 
             if cmd == "1":
                 self.corporate_concourse()
@@ -51,7 +57,8 @@ class StarDock:
             elif cmd == "5":
                 self.tech_lab()
             elif cmd == "0":
-                print("\nYou step back onto your ship as the airlock seals behind you...")
+                print(depart())
+                #print("\nYou step back onto your ship as the airlock seals behind you...")
                 return
 
     # ------------------------------------------------------------
@@ -63,7 +70,7 @@ class StarDock:
         print("A shimmering hive of decadence, danger, and deals.\n")
 
     # ------------------------------------------------------------
-    # Corporate Concourse — Luxury & Legitimacy
+    # Corporate Concourse — Luxury Section
     # ------------------------------------------------------------
     def corporate_concourse(self):
         print("\n--- CORPORATE CONCOURSE ---")
@@ -77,30 +84,57 @@ class StarDock:
             print("4. Purchase Star Charts")
             print("0. Return")
 
-            cmd = input("Select: ").strip()
+            cmd = sd_input("Select: ")
 
+            # Repair Hull
             if cmd == "1":
                 cost = 150
                 healed = 10
+
+                if self.ship.credits < cost:
+                    print("You cannot afford repairs.")
+                    continue
+
                 self.ship.spend_credits(cost)
                 self.ship.hull = min(self.ship.max_hull, self.ship.hull + healed)
                 print(f"Hull repaired by {healed} points.")
 
+            # Upgrade Shields
             elif cmd == "2":
                 cost = 500
                 boost = 5
+
+                if self.ship.credits < cost:
+                    print("You cannot afford shield upgrades.")
+                    continue
+
                 self.ship.spend_credits(cost)
-                self.ship.shields += boost
+                self.ship.shields += boost          # <-- FIXED
                 print(f"Shield capacity upgraded by {boost}.")
 
-            elif cmd == "3":
-                cost = 300
-                self.ship.spend_credits(cost)
-                self.ship.cargo_holds += 5
-                print("Cargo bay expanded by 5 units.")
 
+            # Expand Cargo Hold
+            elif cmd == "3":
+                cost = 5000
+                print(f"Expanding cargo hold by +5 units costs {cost} credits.")
+                confirm = sd_input("Proceed? (y/n) ")
+
+                if confirm.startswith("y"):
+                    if self.ship.credits < cost:
+                        print("You cannot afford this upgrade.")
+                        continue
+
+                    self.ship.spend_credits(cost)
+                    self.ship.max_holds += 5        # <-- ONLY THIS
+                    print(f"Cargo capacity expanded! New capacity: {self.ship.max_holds}")
+
+                else:
+                    print("Upgrade cancelled.")
+
+
+            # Star Charts
             elif cmd == "4":
-                print("The corporate AI injects updated star charts into your nav system.")
+                print("Corporate AI injects updated star charts into nav system.")
 
             elif cmd == "0":
                 return
@@ -118,26 +152,29 @@ class StarDock:
             print("3. Check Interest Rate")
             print("0. Return")
 
-            cmd = input("Select: ").strip()
+            cmd = sd_input("Select: ")
 
             if cmd == "1":
-                amt = int(input("Amount to deposit: "))
+                amt = int(sd_input("Amount to deposit: "))
+                if amt > self.ship.credits:
+                    print("You do not have that many credits.")
+                    continue
                 self.ship.spend_credits(amt)
                 self.ship.bank_balance += amt
                 print("Deposited.")
 
             elif cmd == "2":
-                amt = int(input("Withdraw how much: "))
+                amt = int(sd_input("Withdraw how much: "))
                 if amt > self.ship.bank_balance:
                     print("Insufficient funds.")
-                else:
-                    self.ship.bank_balance -= amt
-                    self.ship.credits += amt
-                    print("Withdrawn.")
+                    continue
+                self.ship.bank_balance -= amt
+                self.ship.credits += amt
+                print("Withdrawn.")
 
             elif cmd == "3":
                 print(f"Bank balance: {self.ship.bank_balance} credits")
-                print("Interest accrues automatically each in-game day (0.5%).")
+                print("Interest accrues automatically each game day (0.5%).")
 
             elif cmd == "0":
                 return
@@ -147,9 +184,7 @@ class StarDock:
     # ------------------------------------------------------------
     def rusty_nebula(self):
         print("\n--- THE RUSTY NEBULA ---")
-        print("A smoky bar full of mercs, scammers, augmented dancers,")
-        print("and black-market hustlers. A place where bad decisions")
-        print("are made enthusiastically.\n")
+        print("A smoky bar full of mercs, scammers, dancers, and hustlers.\n")
 
         while True:
             print("1. Hear Rumors")
@@ -158,77 +193,77 @@ class StarDock:
             print("4. Black Market Upgrades (Coming Soon)")
             print("0. Return")
 
-            cmd = input("Select: ").strip()
+            cmd = sd_input("Select: ")
 
             if cmd == "1":
                 self._random_rumor()
-
             elif cmd == "2":
                 self._gambling_den()
-
             elif cmd == "3":
-                print("Three bruised mercenaries size you up… This feature is coming soon.")
-
+                print("Mercenaries unavailable — union strike.")
             elif cmd == "4":
-                print("A cloaked smuggler whispers: 'I got the good stuff… but not today.'")
-
+                print("Black market closed after a shootout.")
             elif cmd == "0":
                 return
 
     def _random_rumor(self):
         rumors = [
             "A rogue AI ship was spotted near sector 12.",
-            "Smugglers say there's a hidden wormhole near sector 17.",
-            "A corporate transport vanished near the rim — pirates suspected.",
-            "Someone found a planet producing rare organics at insane rates.",
+            "Hidden wormhole detected near sector 17.",
+            "Corporate transport vanished near the rim — pirates suspected.",
+            "A planet producing rare organics at insane rates has been found.",
             "A dancer whispers: 'Some sectors aren’t what they seem…'"
         ]
         print("\nA stranger leans close and mutters:")
-        print("   \"" + random.choice(rumors) + "\"\n")
+        print("  \"" + random.choice(rumors) + "\"\n")
 
     def _gambling_den(self):
-        print("\nYou sit at a neon-lit gambling table. A dealer with chrome eyes smirks.")
-        bet = int(input("Place your bet: "))
+        print("\nYou sit at a neon-lit gambling table.")
+        bet = int(sd_input("Place your bet: "))
+
+        if bet > self.ship.credits:
+            print("You can't bet more credits than you have.")
+            return
+
         self.ship.spend_credits(bet)
         roll = random.randint(1, 100)
+
         if roll > 50:
             winnings = bet * 2
             self.ship.credits += winnings
             print(f"You win! Payout: {winnings} credits.")
         else:
-            print("You lose. The table absorbs your credits coldly.")
+            print("You lose.")
 
     # ------------------------------------------------------------
-    # Market Promenade — Luxury & Exotic Goods
+    # Market Promenade
     # ------------------------------------------------------------
     def market(self):
         print("\n--- MARKET PROMENADE ---")
-        print("Holographic storefronts. Alien fragrances. Fashionistas and scammers.\n")
+        print("Holographic storefronts. Alien fragrances. Shady vendors.\n")
 
         while True:
             print("1. Buy Vanity Items")
             print("2. Browse Exotic Wares")
             print("0. Return")
 
-            cmd = input("Select: ").strip()
+            cmd = sd_input("Select: ")
 
             if cmd == "1":
-                print("A chrome-plated clerk offers a gold-trimmed hull paintjob.")
-
+                print("A clerk offers a gold-trimmed hull paintjob.")
             elif cmd == "2":
                 item = random.choice(["Glitter Spice", "Xeno Wine", "Star Silk", "Void Perfume"])
                 price = random.randint(100, 500)
                 print(f"Exotic item: {item} — {price} credits")
-
             elif cmd == "0":
                 return
 
     # ------------------------------------------------------------
-    # Tech Lab — Experimental Mods (No fuel efficiency)
+    # Tech Lab
     # ------------------------------------------------------------
     def tech_lab(self):
         print("\n--- SCIENCE & TECH LAB ---")
-        print("Sparks fly as engineers bicker over unstable prototypes.\n")
+        print("Sparks fly as engineers argue over unstable prototypes.\n")
 
         while True:
             print("1. Buy Experimental Weapons")
@@ -236,29 +271,39 @@ class StarDock:
             print("3. Commission Prototype Tech (Random Effect)")
             print("0. Return")
 
-            cmd = input("Select: ").strip()
+            cmd = sd_input("Select: ")
 
             if cmd == "1":
                 cost = 600
+                if self.ship.credits < cost:
+                    print("Insufficient credits.")
+                    continue
                 self.ship.spend_credits(cost)
-                print("You acquire a questionable plasma destabilizer. Handle with care.")
+                print("You acquire a questionable plasma destabilizer.")
 
             elif cmd == "2":
                 cost = 350
+                if self.ship.credits < cost:
+                    print("Insufficient credits.")
+                    continue
                 self.ship.spend_credits(cost)
+                #self.ship.shield_strength += 2 #This was crashing the game.
                 self.ship.shields += 2
-                print("A small but noticeable shield capacitor is installed (+2 shields).")
+                print("Shield capacitor installed (+2 shields).")
 
             elif cmd == "3":
                 cost = 400
+                if self.ship.credits < cost:
+                    print("Insufficient credits.")
+                    continue
                 self.ship.spend_credits(cost)
                 effect = random.choice([
                     "hull reinforced (+5 hull)",
-                    "sensor boost (+1 scanner range — cosmetic for now)",
+                    "sensor boost (+1 range — cosmetic)",
                     "ship AI optimized (no visible effect)",
-                    "reactor surge (+1 shield)",
+                    "reactor surge (+1 shield)"
                 ])
-                print(f"The prototype tech completes… {effect}.")
+                print(f"Prototype tech installed: {effect}")
 
             elif cmd == "0":
                 return

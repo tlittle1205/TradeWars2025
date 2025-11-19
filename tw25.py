@@ -17,16 +17,54 @@ import random
 import textwrap
 import json
 
+from ui import Color
 from ship import Ship
 from port import COMMODITIES
 from galaxy import Galaxy
 from combat import CombatEngine
 from stardock import StarDock
-
+from descriptions import depart
+from utils import clearscr
 
 # Optional: console clear (won't fully clear IDLE, but works in a real terminal)
+# ============================================================
+# UNIVERSAL CLEAR + INPUT WRAPPER
+# ============================================================
+
 def clear_screen():
+    """Clear terminal screen universally."""
     print("\033[2J\033[H", end="")
+
+def intercept_clear(cmd: str):
+    """
+    Detect commands that should clear the screen.
+    Called both inside TW25 and inside Stardock via sd_input().
+    """
+    if cmd in ["cls", "clear"]:
+        clear_screen()
+        return True
+    return False
+
+def game_input(prompt="> "):
+    """
+    Replacement for input() everywhere.
+    Supports:
+        - CLS/CLEAR anytime, any menu, anywhere
+        - Returns clean command string
+    """
+    while True:
+        raw = input(prompt)
+        if not raw:
+            return ""  # allow empty input
+        
+        cmd = raw.strip().lower()
+
+        # Clear-screen handling
+        if intercept_clear(cmd):
+            continue
+
+        return cmd
+
 
 
 class TW25Game:
@@ -50,11 +88,19 @@ class TW25Game:
     # --------------------------------------------------------
 
     def intro(self):
-        banner = r"""
-
-  TW2025 - Single-Player TradeWars-Style Sector Trader
-        """
-        print(banner)
+    
+        clearscr()
+        print(Color.RED+r"""
+                             _____             _     __        __                   
+                            |_   _| __ __ _ __| |  __\ \      / /_ _ _ __ ___       
+                              | || '__/ ` |/ _` | / _ \ \ /\ / / _` | '__/ __|      
+                              | || | | (_| | (_| |  __/\ V  V / (_| | |  \__ \      
+                              |_||_|  \__,_|\__,_|\___| \_/\_/_\__,_|_| _|___/____  
+                                                            |___ \ / _ \___ \| ___| 
+                                                              __) | | | |__) |___ \ 
+                                                             / __/| |_| / __/ ___) |
+                                                            |_____|\___/_____|____/ 
+        """+Color.RESET)
         print(
             textwrap.fill(
                 "You command a small trade vessel roaming a fringe star cluster. "
@@ -63,7 +109,7 @@ class TW25Game:
                 width=80,
             )
         )
-        print("\nType HELP for a list of commands.\n")
+  
 
     def help(self):
         print(
@@ -114,11 +160,11 @@ Planet commands (inside LAND):
 
             # Check for death
             if self.player.is_destroyed:
-                print("\nYour ship has been destroyed. Game over.")
+                print(Color.RED+"\nYour ship has been destroyed. Game over."+Color.RESET)
                 break
 
             # Simple win condition
-            if self.player.credits >= 50000:
+            if self.player.credits >= 5000000:
                 print("\nYour accounts overflow with credits.")
                 print("Merchants whisper your name with respect—and pirates with fear.")
                 print("You have effectively 'won' this sector of space. Well done, captain.")
@@ -138,9 +184,9 @@ Planet commands (inside LAND):
                 self.help()
 
             elif cmd in ["q", "quit", "exit"]:
-                print("\nAutosaving your game before exit...")
+                #print("\nAutosaving your game before exit...")
                 self.save_game()
-                print("Game saved. Safe travels, captain.")
+                print(Color.YELLOW+"Game saved. Safe travels, Captain."+Color.RESET)
                 break
 
             elif cmd in ["clear", "cls"]:
@@ -188,6 +234,7 @@ Planet commands (inside LAND):
                 self.wait_turn()
 
             elif cmd in ["market", "mr"]:
+                clearscr()
                 self.market_report()
 
             elif cmd in ["autotrade", "auto-trade", "at"]:
@@ -195,6 +242,8 @@ Planet commands (inside LAND):
 
             elif cmd == "map":
                 try:
+                    clear_screen()
+                    print("Launching probe. Please Stand by...")
                     from render_map import render_galaxy_map
 
                     render_galaxy_map(
@@ -233,18 +282,18 @@ Planet commands (inside LAND):
     def describe_location(self):
         sec = self.current_sector()
 
-        print(f"\n=== {sec.name} (#{sec.id}) ===")
+        print(Color.RED+f"\n=== {sec.name} (#{sec.id}) ==="+Color.RESET)
         neighbors = ", ".join(str(n) for n in sorted(sec.neighbors))
         print(f"Connected sectors: {neighbors}")
 
         # Sector Type Announcements
         if sec.type == "STARDOCK":
-            print("You see the massive shimmering superstructure of STARDOCK here.")
-            print("Type DOCK to enter the Celestial Bazaar.")
+            print(Color.CYAN+"You see the massive shimmering superstructure of STARDOCK here."+Color.RESET)
+            print("Type DOCK to enter the Celestial Bazaar. Keep your wits about you, Captain. The Stardock is home to some very unsavory characters.")
         elif sec.type == "FEDSPACE":
             print("This is secure FEDSPACE. Pirates avoid this region.")
         elif sec.type == "PIRATE":
-            print("Warning: This region is known for pirate ambushes.")
+            print(Color.RED+"Warning: This region is known for pirate ambushes. Best to not linger for long in this sector."+Color.RESET)
         elif sec.type == "DEADEND":
             print("Dead-end sector — only one way in or out.")
 
@@ -258,7 +307,7 @@ Planet commands (inside LAND):
 
         # Pirates
         if sec.has_pirates:
-            print("Long-range sensors ping: possible pirate activity nearby.")
+            print(Color.YELLOW+"Long-range sensors ping: possible pirate activity nearby."+Color.RESET)
 
     def show_status(self):
         print()
@@ -291,7 +340,7 @@ Planet commands (inside LAND):
             return
 
         if self.player.fuel <= 0:
-            print("You are out of fuel! Try WAIT to rebuild a little.")
+            print("You are out of fuel! We will have to WAIT a cycle or two to rebuild our fuel.")
             return
 
         self.player.use_fuel(1)
@@ -361,7 +410,8 @@ Planet commands (inside LAND):
                 continue
 
             if cmd in ["leave", "l", "exit"]:
-                print("You undock from the port.")
+                clear_screen()
+                print(Color.GREEN+"You undock from the port."+Color.RESET)
                 break
 
             if cmd in ["q", "qsell", "q-sell", "sell all"]:
@@ -569,7 +619,7 @@ Planet commands (inside LAND):
     # --------------------------------------------------------
 
     def market_report(self):
-        print("\nGalaxy Market Report")
+        print(Color.GREEN+"\nGalaxy Market Report")
         print("Sec  Port Name           Class  Ore        Org        Eqp")
         print("---------------------------------------------------------------")
         for sid in sorted(self.galaxy.sectors.keys()):
@@ -586,8 +636,8 @@ Planet commands (inside LAND):
             ore_s = fmt("ore")
             org_s = fmt("organics")
             eqp_s = fmt("equipment")
-            print(
-                f"{sid:>3}  {p.name:<18} {code:<5} {ore_s:<9} {org_s:<9} {eqp_s:<9}"
+            print(Color.GREEN+
+                f"{sid:>3}  {p.name:<18} {code:<5} {ore_s:<9} {org_s:<9} {eqp_s:<9}"+Color.RESET
             )
 
     def auto_trade(self):
@@ -749,7 +799,7 @@ Planet commands (inside LAND):
         }
         with open(filename, "w") as f:
             json.dump(data, f, indent=2)
-        print(f"Game saved to {filename}.")
+        #print(f"Game saved to {filename}.")
 
     def load_game(self, filename="savegame.json"):
         try:
