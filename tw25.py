@@ -249,16 +249,18 @@ Planet commands (inside LAND):
             elif cmd == "map":
                 try:
                     clear_screen()
-                    print("Launching probe. Please Stand by...")
-                    sleep(0.7)
-                    print("Calibrating sensors...")
-                    sleep(.1)
-                    print("Aligning warp telemetry...")
-                    sleep(2)
-                    print("Probe entering subspace...")
-                    sleep(3)
-                    print("Receiving scan data...\n")
-                    sleep(.4)
+                    print(Color.GREEN+"Trajectory locked. Engines humming. The void is watching. Launch the probe....")
+                    sleep(1.7)
+                    print("   Let the stars bear witness — deploy the seeker...")
+                    sleep(1.1)
+                    print("      Probe ignition in 3… 2… 1… tear open the veil")
+                    sleep(2.0)
+                    print("          Probe deployed. Destiny accepts our challenge...")
+                    sleep(3.0)
+                    print("...")
+                    sleep(.9)
+                    print("..............Receiving scan data...\n"+Color.RESET)
+                    sleep(2.4)
                     from render_map import render_galaxy_map
 
                     render_galaxy_map(
@@ -299,16 +301,17 @@ Planet commands (inside LAND):
 
         print(Color.RED+f"\n=== {sec.name} (#{sec.id}) ==="+Color.RESET)
         neighbors = ", ".join(str(n) for n in sorted(sec.neighbors))
-        print(f"Connected sectors: {neighbors}")
+        print(Color.MAGENTA+f"Connected sectors: {neighbors}"+Color.RESET)
 
         # Sector Type Announcements
         if sec.type == "STARDOCK":
-            print(Color.CYAN+"Stardock")
-            print()
-            print("You see the massive shimmering superstructure of Stardock here."+Color.RESET)
+            print(Color.BRIGHT_YELLOW+"\n*=*=*=*=*=*=*=*=*=*=*=*="+Color.RESET)
+            print(Color.CYAN+"*=*=*=*=Stardock*=*=*=*="+Color.RESET)
+            print(Color.BRIGHT_YELLOW+"*=*=*=*=*=*=*=*=*=*=*=*="+Color.RESET)
+            print(Color.CYAN+"You see the massive shimmering superstructure of Stardock here.\n"+Color.RESET)
             print("Type DOCK to enter the Celestial Bazaar.")
         elif sec.type == "FEDSPACE":
-            print("This is secure FEDSPACE. Pirates avoid this region.")
+            print(Color.BLUE+"This is secure FEDSPACE. Pirates avoid this region."+Color.RESET)
         elif sec.type == "PIRATE":
             print(Color.RED+"Warning: This region is known for pirate ambushes. Best to not linger for long in this sector."+Color.RESET)
         elif sec.type == "DEADEND":
@@ -316,7 +319,7 @@ Planet commands (inside LAND):
 
         # Port
         if sec.port:
-            print(f"Port present: {sec.port.name} (Class {sec.port.class_code()})")
+            print(Color.GREEN+f"Port present: {sec.port.name} (Class {sec.port.class_code()})"+Color.RESET)
 
         # Planet
         if sec.planet:
@@ -716,7 +719,8 @@ Planet commands (inside LAND):
             max_units = min(s.max_holds, s.credits // best["buy_price"])
         est_profit = max_units * best["profit_per_unit"]
 
-        print("\nRecommended Trade Route:")
+        clearscr()
+        print(Color.CYAN+"Recommended Trade Route:"+Color.RESET)
         print(
             f"  Buy  : {best['commodity'].capitalize()} in sector {best['from_sid']} "
             f"({self.galaxy.sectors[best['from_sid']].port.name}) at {best['buy_price']} cr/unit."
@@ -726,13 +730,14 @@ Planet commands (inside LAND):
             f"({self.galaxy.sectors[best['to_sid']].port.name}) at {best['sell_price']} cr/unit."
         )
         print(f"  Profit per unit : {best['profit_per_unit']} credits")
-        print(f"  Distance        : {best['dist']} hops")
+        print(f"  Distance: {best['dist']} hops")
         if max_units > 0:
-            print(
-                f"  With your current finances and holds, a full run could net ~{est_profit} credits."
+            print(Color.RED+
+                f"  With your current finances and holds, a full run could net ~{est_profit} credits."+Color.RESET
             )
         else:
             print("  You currently lack credits or cargo space to exploit this fully.")
+            print(Color.GREEN+"<<<==x==x==x==x==x==x==x==x==>>>"+Color.RESET)
 
         path_to_buy = self.galaxy.shortest_path(
             self.player.location, best["from_sid"]
@@ -740,10 +745,12 @@ Planet commands (inside LAND):
         if path_to_buy:
             print("\nRoute from your current sector to buy port:")
             print("  " + " -> ".join(str(sid) for sid in path_to_buy))
+            print(Color.GREEN+"<<<==x==x==x==x==x==x==x==x==>>>"+Color.RESET)
         else:
             print(
                 "\nCould not find a path from your location to the recommended buy port."
             )
+            print(Color.GREEN+"<<<==x==x==x==x==x==x==x==x==>>>"+Color.RESET)
 
     # --------------------------------------------------------
     # Pirate Encounters
@@ -806,7 +813,7 @@ Planet commands (inside LAND):
 
         self.player.bank_balance += interest
         print(
-            f"\n📈 Daily Interest: +{interest} credits added to your bank balance "
+            f"\nDaily Interest: +{interest} credits added to your bank balance "
             f"(Day {self.day}, New Balance: {self.player.bank_balance})."
         )
 
@@ -860,7 +867,7 @@ Planet commands (inside LAND):
 
 def main():
     random.seed()
-    game = TW25Game(num_sectors=24)
+    game = TW25Game(num_sectors=100)
     game.run()
 
 

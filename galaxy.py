@@ -32,7 +32,7 @@ class Galaxy:
     Generates a TradeWars-style galaxy.
     """
 
-    def __init__(self, num_sectors=24):
+    def __init__(self, num_sectors=100):
         self.num_sectors = num_sectors
         self.sectors = {}
 

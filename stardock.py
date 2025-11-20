@@ -4,7 +4,9 @@
 # ============================================================
 
 import random
+import textwrap
 
+from time import sleep
 from descriptions import depart
 from ui import Color
 from utils import clearscr
@@ -50,14 +52,19 @@ class StarDock:
             cmd = sd_input("\nChoose destination: ")
 
             if cmd == "1":
+                clearscr()
                 self.corporate_concourse()
             elif cmd == "2":
+                clearscr()
                 self.bank()
             elif cmd == "3":
+                clearscr()
                 self.rusty_nebula()
             elif cmd == "4":
+                clearscr()
                 self.market()
             elif cmd == "5":
+                clearscr()
                 self.tech_lab()
             elif cmd == "0":
                 print(depart())
@@ -68,10 +75,21 @@ class StarDock:
     # Atmosphere
     # ------------------------------------------------------------
     def _print_banner(self):
-        print("\n")
-        print(Color.CYAN+"███  STARDOCK // CELESTIAL BAZAAR  ███"+Color.RESET)
-        print("A shimmering hive of decadence, danger, and deals.\n")
-
+        print(Color.BRIGHT_RED+"Approach vector locked. Thrusters balanced.")
+        sleep(3.0)
+        print("         .......Your ship breaks through the swirling traffic lanes.")
+        sleep(3.0)
+        print("...Freighters claw for docking priority, shuttles scream past your hull, and warning klaxons erupt like gunfire")
+        sleep(3.1)
+        print()
+        print(Color.BRIGHT_YELLOW+
+            textwrap.fill
+                ("The Celestial Bazaar rises before you like a jewel carved from sin. Thousands of thrusters paint the void in gold and sapphire as ships jostle for position. Pleasure yachts glimmer beside rust-bitten smugglers, each dripping attitude. The descent is a dance—fast, sharp, and merciless. One mistake, and you become someone else’s hood ornament.",
+                width=60
+            )
+        )
+        
+        print(Color.CYAN+"\n█████████  STARDOCK // CELESTIAL BAZAAR  █████████"+Color.RESET)
     # ------------------------------------------------------------
     # Corporate Concourse — Luxury Section
     # ------------------------------------------------------------
@@ -100,6 +118,7 @@ class StarDock:
 
                 self.ship.spend_credits(cost)
                 self.ship.hull = min(self.ship.max_hull, self.ship.hull + healed)
+                clearscr()
                 print(f"Hull repaired by {healed} points.")
 
             # Upgrade Shields
@@ -113,12 +132,14 @@ class StarDock:
 
                 self.ship.spend_credits(cost)
                 self.ship.shields += boost          # <-- FIXED
+                clearscr()
                 print(f"Shield capacity upgraded by {boost}.")
 
 
             # Expand Cargo Hold
             elif cmd == "3":
                 cost = 5000
+                clearscr()
                 print(f"Expanding cargo hold by +5 units costs {cost} credits.")
                 confirm = sd_input("Proceed? (y/n) ")
 
@@ -129,6 +150,7 @@ class StarDock:
 
                     self.ship.spend_credits(cost)
                     self.ship.max_holds += 5        # <-- ONLY THIS
+                    clearscr()
                     print(f"Cargo capacity expanded! New capacity: {self.ship.max_holds}")
 
                 else:
@@ -181,6 +203,7 @@ class StarDock:
                 print("Interest accrues automatically each game day (0.5%).")
 
             elif cmd == "0":
+                clearscr()
                 return
 
     # ------------------------------------------------------------
@@ -204,12 +227,14 @@ class StarDock:
                 clearscr()
                 self._random_rumor()
             elif cmd == "2":
+                clearscr()
                 self._gambling_den()
             elif cmd == "3":
                 print("Mercenaries unavailable — union strike.")
             elif cmd == "4":
                 print("Black market closed after a shootout.")
             elif cmd == "0":
+                clearscr()
                 return
 
     def _random_rumor(self):
@@ -276,6 +301,7 @@ class StarDock:
                 price = random.randint(100, 500)
                 print(f"Exotic item: {item} — {price} credits")
             elif cmd == "0":
+                clearscr()
                 return
 
     # ------------------------------------------------------------
@@ -325,4 +351,5 @@ class StarDock:
                 print(f"Prototype tech installed: {effect}")
 
             elif cmd == "0":
+                clearscr()
                 return

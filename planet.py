@@ -15,8 +15,19 @@ import random
 
 
 def generate_planet_name():
-    prefixes = ["New", "Alpha", "Beta", "Gamma", "Delta", "Nova", "Terra", "Fort", "Sigma"]
-    suffixes = ["Prime", "Station", "Base", "Haven", "One", "II", "Harbor", "Reach"]
+    prefixes = [
+        "New", "Alpha", "Beta", "Gamma", "Delta", "Nova", "Terra", "Fort", "Sigma", 
+        "Zeta", "Epsilon", "Kepler", "Proxima", "Helios", "Aether", "Astra", "Solus", 
+        "Gaea", "Neo", "Pax", "Void", "Iron", "Cryo", "Xeno", "Zenith", "Obsidian",
+        "Port", "Citadel", "Stasis", "Helix", "Vector", "Warden", "Genesis"
+    ]
+
+    suffixes = [
+        "Prime", "Station", "Base", "Haven", "One", "II", "Harbor", "Reach",
+        "Colony", "Outpost", "Sector", "Gate", "Spire", "Vault", "Dome", "Array", 
+        "City", "Hub", "Major", "Minor", "Deep", "Rim", "Core", "Point", "Expanse",
+        "VI", "Zero", "Terminus", "Epoch", "Meridian", "Bulwark", "Sanctuary", "Fortress"
+    ]
     return f"{random.choice(prefixes)} {random.choice(suffixes)}"
 
 
