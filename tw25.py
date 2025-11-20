@@ -17,13 +17,16 @@ import random
 import textwrap
 import json
 
-from ui import Color
+from time import sleep
+from ui import Color #Used to add a splash of color here and there
 from ship import Ship
 from port import COMMODITIES
 from galaxy import Galaxy
 from combat import CombatEngine
 from stardock import StarDock
 from descriptions import depart
+from descriptions import departPort
+from descriptions import landingPort
 from utils import clearscr
 
 # Optional: console clear (won't fully clear IDLE, but works in a real terminal)
@@ -175,7 +178,7 @@ Planet commands (inside LAND):
             # Possible pirate encounter
             self.maybe_pirate_encounter()
 
-            cmd = input("\nCommand (? for help): ").strip().lower()
+            cmd = input("\n[Terminal]: ").strip().lower()
             if not cmd:
                 continue
 
@@ -205,6 +208,7 @@ Planet commands (inside LAND):
                 continue
 
             elif cmd == "dock" and sec.type == "STARDOCK":
+                clearscr()
                 self.stardock.enter()
                 # Stardock actions still count as time overall, but we continue loop.
                 # fall through to time advance at bottom
@@ -219,6 +223,8 @@ Planet commands (inside LAND):
                 self.scan()
 
             elif cmd in ["port", "p"]:
+                clearscr()
+                print(Color.GREEN+landingPort())
                 self.visit_port()
 
             elif cmd in ["land", "l"]:
@@ -244,6 +250,15 @@ Planet commands (inside LAND):
                 try:
                     clear_screen()
                     print("Launching probe. Please Stand by...")
+                    sleep(0.7)
+                    print("Calibrating sensors...")
+                    sleep(.1)
+                    print("Aligning warp telemetry...")
+                    sleep(2)
+                    print("Probe entering subspace...")
+                    sleep(3)
+                    print("Receiving scan data...\n")
+                    sleep(.4)
                     from render_map import render_galaxy_map
 
                     render_galaxy_map(
@@ -288,8 +303,10 @@ Planet commands (inside LAND):
 
         # Sector Type Announcements
         if sec.type == "STARDOCK":
-            print(Color.CYAN+"You see the massive shimmering superstructure of STARDOCK here."+Color.RESET)
-            print("Type DOCK to enter the Celestial Bazaar. Keep your wits about you, Captain. The Stardock is home to some very unsavory characters.")
+            print(Color.CYAN+"Stardock")
+            print()
+            print("You see the massive shimmering superstructure of Stardock here."+Color.RESET)
+            print("Type DOCK to enter the Celestial Bazaar.")
         elif sec.type == "FEDSPACE":
             print("This is secure FEDSPACE. Pirates avoid this region.")
         elif sec.type == "PIRATE":
@@ -303,15 +320,20 @@ Planet commands (inside LAND):
 
         # Planet
         if sec.planet:
-            print(f"Planet present: {sec.planet.name}")
+            print(Color.GREEN+f"Planet present: {sec.planet.name}"+Color.RESET)
 
         # Pirates
         if sec.has_pirates:
             print(Color.YELLOW+"Long-range sensors ping: possible pirate activity nearby."+Color.RESET)
 
     def show_status(self):
-        print()
-        print(self.player.status_summary())
+        clearscr()
+        print(Color.RED+"Running diagnostics...")
+        sleep(2)
+        print("         .........Processing ship data")
+        sleep(2)
+        print("----------------------"+Color.RESET)
+        print(Color.GREEN+self.player.status_summary()+Color.RESET)
 
     def show_cargo(self):
         print()
@@ -393,25 +415,27 @@ Planet commands (inside LAND):
         while True:
             print()
             print(port.port_summary())
-            print(
-                f"\nYou have {self.player.credits} credits and {self.player.free_holds} free holds."
+            print()
+            print(Color.RED+
+                f"\nYou have {self.player.credits} credits and {self.player.free_holds} free holds."+Color.RESET
             )
-            print("PORT COMMANDS:")
-            print("  BUY <commodity> <amount>")
-            print("  BUY MAX <commodity>")
-            print("  SELL <commodity> <amount>")
-            print("  SELL ALL")
-            print("  Q or QSELL  (quick-sell everything this port buys)")
-            print("  REPAIR")
-            print("  LEAVE")
-            cmd = input("Port> ").strip().lower()
+            print("Port Commands:")
+            print("  -Buy <commodity> <amount>")
+            print("  -Buy Max <commodity>")
+            print("  -Sell <commodity> <amount>")
+            print("  -Sell All")
+            print("  -Q or QSELL  (quick-sell everything this port buys)")
+            print("  -Repair")
+            print("  -L or Leave")
+            print()
+            cmd = input("\n[Terminal]: ").strip().lower()
 
             if not cmd:
                 continue
 
             if cmd in ["leave", "l", "exit"]:
                 clear_screen()
-                print(Color.GREEN+"You undock from the port."+Color.RESET)
+                print(Color.GREEN+departPort()+Color.RESET)
                 break
 
             if cmd in ["q", "qsell", "q-sell", "sell all"]:
@@ -514,7 +538,7 @@ Planet commands (inside LAND):
             return
 
         planet = sec.planet
-        print(f"\nYou descend to the surface of {planet.name}.\n")
+        print(Color.CYAN+f"\nYou descend to the surface of {planet.name}.\n"+Color.RESET)
 
         while True:
             print("=== Planetary Command Menu ===")
@@ -608,7 +632,8 @@ Planet commands (inside LAND):
                     print(e)
 
             elif choice == "6":  # LEAVE
-                print(f"You lift off from {planet.name} and return to orbit.")
+                clearscr()
+                print(Color.GREEN+f"You lift off from {planet.name} and return to orbit."+Color.RESET)
                 break
 
             else:

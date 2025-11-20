@@ -6,6 +6,9 @@
 import random
 
 from descriptions import depart
+from ui import Color
+from utils import clearscr
+
 # ============================================================
 # LOCAL INPUT WRAPPER (avoids circular import with tw25)
 # ============================================================
@@ -66,7 +69,7 @@ class StarDock:
     # ------------------------------------------------------------
     def _print_banner(self):
         print("\n")
-        print("███  STARDOCK // CELESTIAL BAZAAR  ███")
+        print(Color.CYAN+"███  STARDOCK // CELESTIAL BAZAAR  ███"+Color.RESET)
         print("A shimmering hive of decadence, danger, and deals.\n")
 
     # ------------------------------------------------------------
@@ -84,7 +87,7 @@ class StarDock:
             print("4. Purchase Star Charts")
             print("0. Return")
 
-            cmd = sd_input("Select: ")
+            cmd = sd_input("\nSelect: ")
 
             # Repair Hull
             if cmd == "1":
@@ -137,6 +140,7 @@ class StarDock:
                 print("Corporate AI injects updated star charts into nav system.")
 
             elif cmd == "0":
+                clearscr()
                 return
 
     # ------------------------------------------------------------
@@ -152,7 +156,7 @@ class StarDock:
             print("3. Check Interest Rate")
             print("0. Return")
 
-            cmd = sd_input("Select: ")
+            cmd = sd_input("\nSelect: ")
 
             if cmd == "1":
                 amt = int(sd_input("Amount to deposit: "))
@@ -183,6 +187,7 @@ class StarDock:
     # Rusty Nebula — Seedy Cantina
     # ------------------------------------------------------------
     def rusty_nebula(self):
+        clearscr()
         print("\n--- THE RUSTY NEBULA ---")
         print("A smoky bar full of mercs, scammers, dancers, and hustlers.\n")
 
@@ -193,9 +198,10 @@ class StarDock:
             print("4. Black Market Upgrades (Coming Soon)")
             print("0. Return")
 
-            cmd = sd_input("Select: ")
+            cmd = sd_input("\nSelect: ")
 
             if cmd == "1":
+                clearscr()
                 self._random_rumor()
             elif cmd == "2":
                 self._gambling_den()
@@ -208,14 +214,28 @@ class StarDock:
 
     def _random_rumor(self):
         rumors = [
-            "A rogue AI ship was spotted near sector 12.",
-            "Hidden wormhole detected near sector 17.",
-            "Corporate transport vanished near the rim — pirates suspected.",
-            "A planet producing rare organics at insane rates has been found.",
-            "A dancer whispers: 'Some sectors aren’t what they seem…'"
+            "A rogue AI ship was spotted near sector 12 — the kind that hacks nav-computers mid-flight.",
+            "Hidden wormhole detected near sector 17, but the last scout who entered hasn’t come back.",
+            "Corporate transport vanished near the rim — pirates suspected, slavers more likely.",
+            "A planet producing rare organics at insane rates has been found, and three megacorps already want it buried.",
+            "A dancer whispers: 'Some sectors aren’t what they seem… especially the ones with no beacons.'",
+            "A smuggler swears he saw a derelict cruiser drifting in sector 44, lights still on, crew long gone.",
+            "An old miner claims something is tunneling through subspace and 'eating whole sectors' when no one’s watching.",
+            "A black-market dealer is offering maps to a dead civilization’s vault, but every buyer so far has turned up skinned.",
+            "Someone found a trader’s ship floating near sector 9 with all cargo untouched — but the cockpit drenched in blood.",
+            "A cyborg drifter mutters about an unregistered fleet massing in deep space, ships with no transponders and no heat signatures.",
+            "Dock workers say a ghost signal pings from sector 3 every night at the same hour — the frequency matches a ship lost 40 years ago.",
+            "A bounty hunter claims the cartel installed a listening post in a nebula and is tracking anyone carrying high-value goods.",
+            "A mercenary says an alien relic was dug up on a forgotten moon, and everyone who studied it either vanished or went mad.",
+            "Someone saw a ship land at a remote fueling rig, and when it left, the rig’s entire crew was missing without a fight.",
+            "A broker whispers about a 'sector reset' event coming soon — nobody knows what it means, but he’s already running.",
         ]
-        print("\nA stranger leans close and mutters:")
-        print("  \"" + random.choice(rumors) + "\"\n")
+
+        print(Color.YELLOW+"\nA stranger leans close and mutters:")
+        #print(  \"" + random.choice(rumors) + "\"\n)
+        print(f"   {random.choice(rumors)}\n"+Color.RESET)
+        print(">---#---< >---#---< >---#---<")
+
 
     def _gambling_den(self):
         print("\nYou sit at a neon-lit gambling table.")
@@ -247,7 +267,7 @@ class StarDock:
             print("2. Browse Exotic Wares")
             print("0. Return")
 
-            cmd = sd_input("Select: ")
+            cmd = sd_input("\nSelect: ")
 
             if cmd == "1":
                 print("A clerk offers a gold-trimmed hull paintjob.")
@@ -271,7 +291,7 @@ class StarDock:
             print("3. Commission Prototype Tech (Random Effect)")
             print("0. Return")
 
-            cmd = sd_input("Select: ")
+            cmd = sd_input("\nSelect: ")
 
             if cmd == "1":
                 cost = 600
@@ -287,7 +307,6 @@ class StarDock:
                     print("Insufficient credits.")
                     continue
                 self.ship.spend_credits(cost)
-                #self.ship.shield_strength += 2 #This was crashing the game.
                 self.ship.shields += 2
                 print("Shield capacitor installed (+2 shields).")
 

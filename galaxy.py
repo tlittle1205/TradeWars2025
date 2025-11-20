@@ -125,8 +125,8 @@ class Galaxy:
             if random.random() < 0.4:
                 sector.port = Port()
 
-            # 10% chance sector has a planet
-            if random.random() < 0.1:
+            # 20% chance sector has a planet
+            if random.random() < 0.2:
                 sector.planet = Planet(sector.id)
 
     # ----------------------------------------------------------

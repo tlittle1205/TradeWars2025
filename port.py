@@ -36,12 +36,22 @@ PORT_TYPES = {
 
 PORT_PREFIXES = [
     "Rigel", "Sigma", "Omega", "Alpha", "Beta", "Tau",
-    "Nova", "Epsilon", "Orion", "Kappa", "Gamma"
+    "Nova", "Epsilon", "Orion", "Kappa", "Gamma",
+    "Vega", "Zeta", "Helios", "Astra", "Cygnus",
+    "Nebula", "Zenith", "Prax", "Lumen", "Draco",
+    "Solara", "Lyra", "Arcturus", "Hydra", "Cetus",
+    "Altair", "Zenon", "Polaris", "Vortex", "Terminus",
+    "Delta", "Iota", "Hades", "Pinnacle", "Borealis"
 ]
 
 PORT_SUFFIXES = [
     "Tradeport", "Station", "Depot", "Exchange",
-    "Market", "Outpost", "Harbor"
+    "Market", "Outpost", "Harbor",
+    "Terminal", "Platform", "Hold", "Concourse",
+    "Annex", "Bazaar", "Refinery", "Foundry",
+    "Spire", "Hub", "Ring", "Stronghold",
+    "Sanctum", "Citadel", "Relay", "Beltway",
+    "Port", "Dock", "Encampment", "Harborworks"
 ]
 
 def random_port_name():
@@ -186,6 +196,7 @@ class Port:
         lines = [
             f"Port: {self.name}",
             f"Class: {self.class_code()}",
+            "",
             "Commodity    Mode      Level   Price",
             "----------------------------------------",
         ]

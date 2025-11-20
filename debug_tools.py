@@ -201,9 +201,24 @@ def validate_special_sectors(galaxy):
     else:
         print(GREEN + "✔ All special-sector rules validated." + RESET)
 
+# ============================================================
+# 8. LIST SECTORS WITH PORTS AND PLANETS (FORMATTED)
+# ============================================================
+
+def list_sectors_with_ports_and_planets(galaxy):
+    header("SECTORS WITH PORTS AND PLANETS")
+
+    for sid, sec in galaxy.sectors.items():
+        port_name   = sec.port.name   if sec.port else ""
+        planet_name = sec.planet.name if sec.planet else ""
+
+        # Format as:  Sector: Port: [name] | Planet: [name]
+        print(f"Sector {sid}: Port: [{port_name:<20}] | Planet: [{planet_name:<20}]")
+
+
 
 # ============================================================
-# 8. FULL GALAXY DIAGNOSTIC
+# 9. FULL GALAXY DIAGNOSTIC
 # ============================================================
 
 def run_all_debug(galaxy):
@@ -217,3 +232,4 @@ def run_all_debug(galaxy):
     validate_ports(galaxy)
     validate_planets(galaxy)
     validate_special_sectors(galaxy)
+    list_sectors_with_ports_and_planets(galaxy)
